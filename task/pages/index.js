@@ -3,19 +3,26 @@ import {getUser} from "./api/getRepo";
 
 
 export default function Home() {
-    let textInput = React.createRef();
-    let handler = async () => {
-        let user = await getUser(textInput.current.value, '')
+    let userInput = React.createRef();
+    let repoInput = React.createRef();
 
-        textInput.current.value = '';
+    let handlerUserInput = async () => {
+        let user = await getUser(userInput.current.value, repoInput.current.value)
+
+        userInput.current.value = '';
+        repoInput.current.value = '';
+        console.log(user)
     }
     return (
         <>
             <h1>Adata Pro FE</h1>
 
             <label htmlFor="git-user">Github user:</label>
-            <input ref={textInput} id="git-user" type="text"/>
-            <button type={"submit"} onClick={handler}>submit</button>
+            <input ref={userInput} id="git-user" type="text"/>
+            <br/>
+            <label htmlFor="git-repo">Github user:</label>
+            <input ref={repoInput} id="git-repo" type="text"/>
+            <button type={"submit"} onClick={handlerUserInput}>submit</button>
 
         </>
     )
