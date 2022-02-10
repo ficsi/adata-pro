@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {getUser} from "./api/getRepo";
+import {getData, getIssues} from "./api/getRepo";
 
 
 export default function Home() {
@@ -8,19 +8,15 @@ export default function Home() {
 
     const [issue, setIssue] = useState(false);
     const [user, setUser] = useState({});
-    let test = 'test:false';
+
+    let test;
     let handlerUserInput = async (event) => {
         event.preventDefault();
-        setUser(async () => await getUser(userInput.current.value, repoInput.current.value));
-        // setIssue( ()=> user.has_issues);
+        setUser(await getData(userInput.current.value, repoInput.current.value));
+        setIssue(true);
     }
-
-    useEffect( () => {
-        test = 'test:true';
-
-    }, [user]);
-
-        return (
+    console.log(user.open_issues_count)
+    return (
         <>
             <h1>Adata Pro FE</h1>
 
@@ -31,10 +27,19 @@ export default function Home() {
             <input ref={repoInput} id="git-repo" type="text"/>
             <button type={"submit"} onClick={handlerUserInput}>submit</button>
 
-            {issue ?? 'true'}
+            {
+                issue ?
+
+                    <h1>{user.name} has {user.open_issues_count} open issue/s</h1>
+                    :
+                    <p>NO!</p>
+
+
+            }
         </>
     )
 }
+
 export async function getServerSideProps(context) {
     console.log(context)
     return {
